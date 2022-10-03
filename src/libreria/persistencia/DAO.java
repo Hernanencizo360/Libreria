@@ -1,4 +1,3 @@
-
 package libreria.persistencia;
 
 import javax.persistence.EntityManager;

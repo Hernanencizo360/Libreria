@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package libreria.servicios;
 
 import java.util.InputMismatchException;
@@ -27,6 +22,51 @@ public class LibroServicio {
         this.DAO = new LibroDAO();
     }
 
+    public void cargarLibro() {
+        try {
+            AutorServicio autorServ = new AutorServicio();
+            EditorialServicio editorialServ = new EditorialServicio();
+
+            System.out.println("Ingrese el nombre del libro");
+            String titulo = leer.next();
+            System.out.println("Ingrese el año del libro");
+            Integer anio = leer.nextInt();
+            System.out.println("Ingrese el alta del libro: ");
+            Boolean alta = leer.nextBoolean();
+            System.out.println("Ingrese el nombre del Autor");
+            String nombreAutor = leer.next();
+            System.out.println("Ingrese el nombre de la editorial: ");
+            String editorialNombre = leer.next();
+
+            // buscar autor por nombre en el autor servicio; 
+            if (autorServ.buscarPorNombre(nombreAutor) == null) {
+                autorServ.cargarAutor(nombreAutor, false);
+                Autor autor = new Autor();
+                autor.setNombre(nombreAutor);
+                autor.setAlta(alta);
+            }
+
+            // buscar editorial por nombre.
+            if (editorialServ.buscarPorNombre(editorialNombre) == null) {
+                editorialServ.cargarEditorial(editorialNombre, false);
+            }
+            guardarLibro(titulo, anio, alta, autorServ.buscarPorNombre(nombreAutor), editorialServ.buscarPorNombre(editorialNombre));
+        } catch (InputMismatchException im) {
+            System.out.println(im.getMessage());
+            System.out.println("Error en el tipo de dato");
+            im.printStackTrace(System.out);
+            System.out.println("");
+            leer.next();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace(System.out);
+            System.out.println("");
+        }
+    }
+
+    // para mejorar el diagram el servicio deberia pasarle todos los datos al LibroDAO y dejar que el se encargue 
+    // de las validaciones y creaciones correspondientes. 
     public void guardarLibro(String titulo, Integer anio, Boolean alta, Autor autor, Editorial editorial) {
 
         try {
@@ -89,6 +129,7 @@ public class LibroServicio {
     }
 
     public void modificarAlta(Long isbn) {
+
         Libro libro = new Libro();
         libro = DAO.buscarPorIsbn(isbn);
 
@@ -100,6 +141,9 @@ public class LibroServicio {
             } else {
                 libro.setAlta(false);
             }
+            DAO.modificarAlta(libro);
+            System.out.println("El ALTA del libro se modifico satisfactoriamente a: " + libro.getAlta());
+            System.out.println("");
         }
     }
 
@@ -118,22 +162,22 @@ public class LibroServicio {
             System.out.println(libro.toString());
         }
     }
-    
-    public void mostrarLibrosPorNombreDeAutor(String nombreAutor){
-        List<Libro> libros = DAO.buscarLibrosPorAutor(nombreAutor);
-        
-        libros.forEach((libro) -> {
-            System.out.println(libro.toString());
-        });
-    }
-    
-     public void mostrarLibrosPorNombreDeEditorial(String nombreEditorial){
-        List<Libro> libros = DAO.buscarLibrosPorEditorial(nombreEditorial);
-        
-        libros.forEach((libro) -> {
-            System.out.println(libro.toString());
-        });
-    }
-    
 
+    public void mostrarLibrosPorNombreDeAutor(String nombreAutor) {
+        List<Libro> libros = DAO.buscarLibrosPorAutor(nombreAutor);
+
+        System.out.println("Libros encontrados del Autor: " + libros.size());
+        libros.forEach((libro) -> {
+            System.out.println(libro.toString());
+        });
+    }
+
+    public void mostrarLibrosPorNombreDeEditorial(String nombreEditorial) {
+        List<Libro> libros = DAO.buscarLibrosPorEditorial(nombreEditorial);
+
+        System.out.println("Libros encontrados de la Editorial: " + libros.size());
+        libros.forEach((libro) -> {
+            System.out.println(libro.toString());
+        });
+    }
 }

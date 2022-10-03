@@ -75,9 +75,13 @@ public class Editorial {
         return true;
     }
 
+//    @Override
+//    public String toString() {
+//        return "libreria.entidades.Editorial[ id=" + id + " ]";
+//    }
+
     @Override
     public String toString() {
-        return "libreria.entidades.Editorial[ id=" + id + " ]";
+        return "Editorial{" + "id=" + id + ", nombre=" + nombre + ", alta=" + alta + '}';
     }
-    
 }

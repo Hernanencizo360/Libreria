@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package libreria.servicios;
 
 import libreria.entidades.Editorial;
@@ -20,7 +15,15 @@ public class EditorialServicio {
         this.DAO = new EditorialDAO();
     }
 
-    
+    public void cargarEditorial(String nombre, Boolean alta) {
+        try {
+            guardarEditorial(nombre, alta);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Error inesperado");
+        }
+    }
 
     public void guardarEditorial(String nombre, Boolean alta) {
         Editorial editorial = new Editorial();
@@ -28,8 +31,8 @@ public class EditorialServicio {
         editorial.setNombre(nombre);
         editorial.setAlta(alta);
 
-        if (DAO.buscarPorNombre(nombre)== null) {
-             DAO.guardar(editorial);
+        if (DAO.buscarPorNombre(nombre) == null) {
+            DAO.guardar(editorial);
         } else {
             System.out.println("El nombre de la editorial ya existe en la BBDD");
         }
@@ -39,4 +42,22 @@ public class EditorialServicio {
         return DAO.buscarPorNombre(nombre);
     }
 
+    public void modificarAlta(Integer id) {
+
+        Editorial editorial = new Editorial();
+        editorial = DAO.buscarPorId(id);
+
+        if (!editorial.getId().equals(id)) {
+            System.out.println("La Editorial no se encuentra en la BBDD");
+        } else {
+            if (editorial.getAlta().equals(false)) {
+                editorial.setAlta(true);
+            } else {
+                editorial.setAlta(false);
+            }
+            DAO.modificarAlta(editorial);
+            System.out.println("El ALTA de la Editorial se modifico satisfactoriamente a: " + editorial.getAlta());
+            System.out.println("");
+        }
+    }
 }

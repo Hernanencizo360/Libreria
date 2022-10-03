@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package libreria.entidades;
 
 import javax.persistence.Entity;
@@ -18,7 +13,8 @@ import javax.persistence.OneToOne;
 @Entity
 public class Libro {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long isbn;
     private String titulo;
     private Integer anio;
@@ -41,7 +37,7 @@ public class Libro {
         this.autor = autor;
         this.editorial = editorial;
     }
-    
+
     //Constructor sin autor ni editorial
     public Libro(Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPestados, Integer ejemplaresRestantes, Boolean alta) {
         this.isbn = isbn;
@@ -68,12 +64,10 @@ public class Libro {
     // Es muy importante notar que no está permitido modificar la clave primaria de una entidad gestionada.
     // Si intentamos hacerlo, en el momento de hacer un commit la transacción lanzará una excepción RollbackException.
     // Para reforzar esta idea, es conveniente definir las entidades sin un método set de la clave primaria. 
-
     public void setIsbn(Long isbn) {
         this.isbn = isbn;
     }
-    
-    
+
     public Long getIsbn() {
         return isbn;
     }
@@ -140,5 +134,20 @@ public class Libro {
 
     public void setEditorial(Editorial editorial) {
         this.editorial = editorial;
+    }
+
+    @Override
+    public String toString() {
+        return "-----------------|INFORMACION DEL LIBRO|----------------- " + "\n"
+                + "ISBN        " + "\t" + isbn + "\n"
+                + "Titulo      " + "\t" + titulo + "\n"
+                + "AÑO         " + "\t" + anio + "\n"
+                + "Ejemplares  " + "\t" + ejemplares + "\n"
+                + "Ej Prestados" + "\t" + ejemplaresPestados + "\n"
+                + "Ej Restantes" + "\t" + ejemplaresRestantes + "\n"
+                + "Alta        " + "\t" + alta + "\n"
+                + "Autor       " + "\t" + autor + "\n"
+                + "Editorial   " + "\t" + editorial + "\n"
+                + "---------------------------------------------------------" + "\n";
     }
 }

@@ -77,6 +77,6 @@ public class Autor {
 
     @Override
     public String toString() {
-        return "libreria.entidades.Autor[ id=" + id + " ]";
-    }
+        return "Autor{" + "id=" + id + ", nombre=" + nombre + ", alta=" + alta + '}';
+    } 
 }

@@ -1,15 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package libreria.servicios;
 
-import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import libreria.entidades.Autor;
-import libreria.entidades.Editorial;
 
 /**
  *
@@ -29,10 +21,12 @@ public class MenuServicio {
         this.editorialServ = new EditorialServicio();
     }
 
+    // falta resolver opcion 10 y 11; 
     public void menuPrincipal() {
         boolean salir = true;
         int opcion;
         Long isbn;
+        Integer idAutor, idEditorial;
 
         do {
 
@@ -40,36 +34,40 @@ public class MenuServicio {
 
                 System.out.println("Bienvenido al menu: ");
 
-                System.out.println("1-. Cargar un Autor.");
-                System.out.println("2-. Cargar una Editorial.");
-                System.out.println("3-. Cargar un Libro.");
+                System.out.println("1 -. Cargar un Autor.");
+                System.out.println("2 -. Cargar una Editorial.");
+                System.out.println("3 -. Cargar un Libro.");
 
-                System.out.println("4-. Dar de baja/alta un libro. ");
-                System.out.println("5-. Buscar un Autor por su nombre.");
-                System.out.println("6-. Buscar un Libro por su ISBN.");
-                System.out.println("7-. Buscar un Libro por su Titulo");
-                System.out.println("8-. Buscar libro/s por su nombre de Autor. ");
-                System.out.println("9-. Buscar libro/s por su nombre de Editorial. ");
-                System.out.println("10-. Salir");
+                // podria crear un sub menu de editar libro autor y editorial para luego en un switch pedir los datos que desea modificar.
+                System.out.println("4 -. Dar de baja/alta un libro. ");
+                System.out.println("5 -. Dar de baja/alta un autor. ");
+                System.out.println("6 -. Dar de baja/alta una editorial. ");
+
+                System.out.println("7 -. Buscar un Autor por su nombre.");
+                System.out.println("8 -. Buscar un Libro por su ISBN.");
+                System.out.println("9 -. Buscar un Libro por su Titulo");
+                System.out.println("10-. Buscar libro/s por su nombre de Autor. ");
+                System.out.println("11-. Buscar libro/s por su nombre de Editorial. ");
+                System.out.println("12-. Salir");
                 opcion = leer.nextInt();
 
                 switch (opcion) {
                     case 1:
-                        System.out.println("Ingrese el nombre del Autor");
+                        System.out.println("Ingrese el nombre del Autor que desea cargar");
                         String nombreAutor = leer.next();
                         System.out.println("Ingrese el tipo de Alta que posee el Autor");
                         Boolean altaAutor = leer.nextBoolean();
-                        cargarAutor(nombreAutor, altaAutor);
+                        autorServ.cargarAutor(nombreAutor, altaAutor);
                         break;
                     case 2:
                         System.out.println("Ingrese el nombre de la Editorial");
                         String nombreEditorial = leer.next();
                         System.out.println("Ingrese el tipo de Alta que posee la Editorial");
                         Boolean altaEditorial = leer.nextBoolean();
-                        cargarEditorial(nombreEditorial, altaEditorial);
+                        editorialServ.cargarEditorial(nombreEditorial, altaEditorial);
                         break;
                     case 3:
-                        cargarLibro();
+                        libroServ.cargarLibro();
                         break;
                     case 4:
                         System.out.println("Inserte el ISBN del libro al que desea dar de baja/alta.");
@@ -77,103 +75,54 @@ public class MenuServicio {
                         libroServ.modificarAlta(isbn);
                         break;
                     case 5:
+                        System.out.println("Inserte el ID del Autor al que desea dar de baja/alta.");
+                        idAutor = leer.nextInt();
+                        autorServ.modificarAlta(idAutor);
+                        break;
+                    case 6:
+                        System.out.println("Inserte el ID de la Editorial al que desea dar de baja/alta.");
+                        idEditorial = leer.nextInt();
+                        editorialServ.modificarAlta(idEditorial);
+                        break;
+                    case 7:
                         System.out.println("Ingrese el nombre del Autor que desea buscar: ");
                         String nombre = leer.next();
                         autorServ.mostarAutor(autorServ.buscarPorNombre(nombre));
                         break;
-                    case 6:
+                    case 8:
                         System.out.println("Ingrese el ISBN del libro que desea buscar.");
                         isbn = leer.nextLong();
                         libroServ.mostarLibroPorIsbn(libroServ.buscarPorIsbn(isbn));
                         break;
-                    case 7:
+                    case 9:
                         System.out.println("Ingrese el Titulo del Libro que desea buscar: ");
                         String titulo = leer.next();
                         libroServ.mostarLibroPorTitulo(libroServ.buscarPorTitulo(titulo));
                         break;
-                    case 8:
+                    case 10:
                         System.out.println("Ingrese el Nombre del Autor que desea buscar: ");
                         String nombreAutorb = leer.next();
                         libroServ.mostrarLibrosPorNombreDeAutor(nombreAutorb);
                         break;
-                    case 9:
+                    case 11:
                         System.out.println("Ingrese el Nombre de la Editorial que desea buscar: ");
                         String nombresEditorial = leer.next();
-                        libroServ.mostrarLibrosPorNombreDeAutor(nombresEditorial);
+                        libroServ.mostrarLibrosPorNombreDeEditorial(nombresEditorial);
                         break;
-                    case 10:
+                    case 12:
                         salir = false;
                         break;
                     default:
-                        System.out.println("Debe ingresar un numero entre 1 y 10.");
+                        System.out.println("Debe ingresar un numero entre 1 y 12.");
                 }
             } catch (InputMismatchException im) {
                 System.out.println(im.getMessage());
                 leer.next();
-                System.out.println("Debe ingresar un Número.");
+                System.out.println("Error el tipo de dato no cohincide");
 
+            } catch (Exception e) {
+                System.out.println("Error en el menu.");
             }
         } while (salir);
     }
-
-    public void cargarAutor(String nombre, Boolean alta) {
-        try {
-            autorServ.guardarAutor(nombre, alta);
-        } catch (InputMismatchException im) {
-            System.out.println("Debe ingresar un valor Booleano: true o false.");
-            System.out.println(im.getMessage());
-        } catch (Exception e) {
-            System.out.println("Error inesperado");
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void cargarLibro() {
-        try {
-
-            System.out.println("Ingrese el nombre del libro");
-            String titulo = leer.next();
-            System.out.println("Ingrese el año del libro");
-            Integer anio = leer.nextInt();
-            System.out.println("Ingrese el alta del libro: ");
-            Boolean alta = leer.nextBoolean();
-            System.out.println("Ingrese el nombre del Autor");
-            String nombreAutor = leer.next();
-            System.out.println("Ingrese el nombre de la editorial: ");
-            String editorialNombre = leer.next();
-
-            // buscar autor por nombre en el autor servicio; 
-            if(autorServ.buscarPorNombre(nombreAutor) == null){
-                cargarAutor(nombreAutor, false);
-                Autor autor = new Autor();
-                autor.setNombre(nombreAutor);
-                autor.setAlta(alta);
-            } 
-            
-            // buscar editorial por nombre.
-            if(editorialServ.buscarPorNombre(editorialNombre)== null){
-                cargarEditorial(editorialNombre, false);
-            }
-            
-            
-
-            libroServ.guardarLibro(titulo, anio, alta, autorServ.buscarPorNombre(nombreAutor), editorialServ.buscarPorNombre(editorialNombre));
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    public void cargarEditorial(String nombre, Boolean alta) {
-
-        try {
-            editorialServ.guardarEditorial(nombre, alta);
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Error inesperado");
-        }
-    }
-
 }

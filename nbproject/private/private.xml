@@ -3,10 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Claudio/Desktop/FULL%20STACK/6-JPA/Libreria/src/libreria/servicios/MenuServicio.java</file>
-            <file>file:/C:/Users/Claudio/Desktop/FULL%20STACK/6-JPA/Libreria/src/libreria/persistencia/DAO.java</file>
-            <file>file:/C:/Users/Claudio/Desktop/FULL%20STACK/6-JPA/Libreria/src/libreria/persistencia/LibroDAO.java</file>
-            <file>file:/C:/Users/Claudio/Desktop/FULL%20STACK/6-JPA/Libreria/src/libreria/servicios/LibroServicio.java</file>
+            <file>file:/C:/Users/Claudio/Desktop/FULL%20STACK/6-JPA/Libreria/src/libreria/entidades/Autor.java</file>
+            <file>file:/C:/Users/Claudio/Desktop/FULL%20STACK/6-JPA/Libreria/src/libreria/Libreria.java</file>
+            <file>file:/C:/Users/Claudio/Desktop/FULL%20STACK/6-JPA/Libreria/src/libreria/servicios/AutorServicio.java</file>
+            <file>file:/C:/Users/Claudio/Desktop/FULL%20STACK/6-JPA/Libreria/src/libreria/persistencia/AutorDAO.java</file>
         </group>
     </open-files>
 </project-private>

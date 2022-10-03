@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package libreria.persistencia;
 
 import java.util.List;
-import java.util.Objects;
 import libreria.entidades.Autor;
 import libreria.entidades.Libro;
 
@@ -26,9 +20,10 @@ public class LibroDAO extends DAO<Libro> {
             libroAux = buscarPorIsbn(libro.getIsbn());
             if (libroAux == null) {
                 super.guardar(libro);
-                System.out.println("Libro guardado exitosamenete");   
+                System.out.println("Libro guardado exitosamenete");
+                System.out.println("");
             } else {
-                 System.out.println("El libro ya existe");
+                System.out.println("El libro ya existe");
             }
         }
     }
@@ -38,31 +33,40 @@ public class LibroDAO extends DAO<Libro> {
         conectar();
         Libro libro;
         try {
-            
+
             libro = (Libro) em.createQuery("SELECT lib FROM Libro lib WHERE lib.isbn = :isbn")
                     .setParameter("isbn", isbn).getSingleResult();
-            
+
             return libro;
         } catch (Exception e) {
             libro = null;
             System.out.println("No se encontro ese libro.");
             return libro;
-        }finally{
+        } finally {
             desconectar();
         }
     }
 
     public Libro buscarPorTitulo(String titulo) {
         conectar();
-        Libro libro = (Libro) em.createQuery("SELECT lib FROM Libro lib WHERE lib.titulo = :titulo")
-                .setParameter("titulo", titulo).getSingleResult();
-        desconectar();
-        return libro;
+        Libro libro;
+        try {
+            libro = (Libro) em.createQuery("SELECT lib FROM Libro lib WHERE lib.titulo = :titulo")
+                    .setParameter("titulo", titulo).getSingleResult();
+            return libro;
+        } catch (Exception e) {
+            libro = null;
+            System.out.println("No se encontro el titulo de ese libro.");
+            return libro;
+        } finally {
+            desconectar();
+        }
     }
 
     public Libro buscarPorAutor(Autor autor) {
         conectar();
         // esto creo que deberia hacer una subconsulta
+        
         Libro libro = (Libro) em.createQuery("SELECT lib FROM Libro lib WHERE lib.autor = :autor")
                 .setParameter("autor", autor).getSingleResult();
         desconectar();
@@ -75,14 +79,19 @@ public class LibroDAO extends DAO<Libro> {
         super.eliminar(libro);
     }
 
+    public void modificarAlta(Libro libro) {
+        // le paso el objeto la clase padre es la encargada de realizar los cambios pertinentes. 
+        super.editar(libro);
+    }
+
     public List<Libro> buscarLibrosPorAutor(String nombreAutor) {
         conectar();
         //Opcion 1 sin JOIN
-        //        List<Persona> personas = em.createQuery("SELECT p FROM Persona p WHERE p.direccion.pais LIKE :pais AND p.direccion.provincia LIKE :provincia ")
-        //                .setParameter("pais", pais).setParameter("provincia", provincia).getResultList();
+        List<Libro> libros = em.createQuery("SELECT lib FROM Libro lib WHERE lib.autor.nombre LIKE :nombre")
+                .setParameter("nombre", nombreAutor).getResultList();
         //Opcion 2 con JOIN
-        List<Libro> libros = em.createQuery("SELECT lib FROM Libro lib JOIN lib.autor a WHERE a.nombre LIKE :nombreAutor")
-                .setParameter("nombre", nombreAutor).setParameter("nombre", nombreAutor).getResultList();
+//        List<Libro> libros = em.createQuery("SELECT lib FROM Libro lib JOIN lib.autor a WHERE a.nombre LIKE :nombreAutor")
+//                .setParameter("nombre", nombreAutor).getResultList();
         desconectar();
         return libros;
     }
@@ -90,11 +99,11 @@ public class LibroDAO extends DAO<Libro> {
     public List<Libro> buscarLibrosPorEditorial(String nombreEditorial) {
         conectar();
         //Opcion 1 sin JOIN
-        //        List<Persona> personas = em.createQuery("SELECT p FROM Persona p WHERE p.direccion.pais LIKE :pais AND p.direccion.provincia LIKE :provincia ")
-        //                .setParameter("pais", pais).setParameter("provincia", provincia).getResultList();
+        List<Libro> libros = em.createQuery("SELECT lib FROM Libro lib WHERE lib.editorial.nombre LIKE :nombre")
+                .setParameter("nombre", nombreEditorial).getResultList();
         //Opcion 2 con JOIN
-        List<Libro> libros = em.createQuery("SELECT lib FROM Libro lib JOIN lib.editorial e WHERE e.nombre LIKE :nombreEditorial")
-                .setParameter("nombre", nombreEditorial).setParameter("nombre", nombreEditorial).getResultList();
+//        List<Libro> libros = em.createQuery("SELECT lib FROM Libro lib JOIN lib.autor a WHERE a.nombre LIKE :nombreAutor")
+//                .setParameter("nombre", nombreAutor).getResultList();
         desconectar();
         return libros;
     }
